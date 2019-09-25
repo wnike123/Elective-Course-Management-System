@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>信息管理系统</title>
+		<link href="/css/style.css" rel="stylesheet" type="text/css" />
+		<script type="text/javascript" src="/js/jquery.js"></script>
+	</head>
+	<body style="background: background:url(images/topbg.gif) repeat-x">
+		<div class="main">
+
+			<!-- 头部 -->
+			<%- include ../common/top.html %>
+			<!--头部结束 end-->
+
+			<!-- 内容区域 -->
+			<div class="content">
+
+				<!-- 左侧导航 -->
+				<div class="leftNav">
+					<%- include ../common/left.html %>
+				</div>
+				<!-- 左侧导航 end -->
+
+				<!-- 右侧内容 -->
+				<div class="right-content">
+					<div class="place">
+						<span>位置：</span>
+						<ul class="placeul">
+							<li><a href="/admin">首页</a></li>
+							<li><a href="#">管理操作</a></li>
+							<li><a href="#">导入学生excel表</a></li>
+						</ul>
+					</div>
+					<div class="rightinfo">
+						<div class="formbody">
+							<div class="formtitle"><span>请导入excel表格</span></div>
+							<form action="/admin/student/import" method="post" enctype="multipart/form-data">
+								<ul class="forminfo">
+									<li><strong>请上传符合形式的表格,每个年级一个子表，子表的每一列依次是学号、姓名、性别</strong></li>
+									<li><label></label><input name="studentexcel" type="file" /></li>
+									<li>
+										<button type="submit" class="btn">上传文件</button>
+									</li>
+								</ul>
+							</form>
+						</div>
+					</div>
+				</div>
+				<!-- 右侧内容 end -->
+			</div>
+			<!-- 内容区域 end -->
+		</div>
+		<!-- 父main end -->
+	</body>
+</html>
