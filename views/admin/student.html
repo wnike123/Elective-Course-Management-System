@@ -5,6 +5,9 @@
 		<title>信息管理系统</title>
 		<link href="/css/style.css" rel="stylesheet" type="text/css" />
 		<script type="text/javascript" src="/js/jquery.js"></script>
+		<link href="/css/animate.css" rel="stylesheet" type="text/css">
+		<link href="/css/noticejs.css" rel="stylesheet" type="text/css">
+		<script type="text/javascript" src="/js/notice.js"></script>
 	</head>
 	<body style="background: background:url(images/topbg.gif) repeat-x">
 		<div class="main">
@@ -39,11 +42,12 @@
 
 							<ul class="toolbar">
 								<li class="click"><span><img src="/images/t01.png" /></span>添加</li>
-								<li class="click"><span><img src="/images/t02.png" /></span>修改</li>
-								<li><span><img src="/images/t03.png" /></span>删除</li>
+								<li>
+									<input type="text" placeholder="请输入搜索内容" id="searchInput">
+									<button onclick="search()">搜索</button>
+								</li>
 								<li><span><img src="/images/t04.png" /></span>统计</li>
 							</ul>
-
 
 							<ul class="toolbar1">
 								<li><span><img src="/images/t05.png" /></span>设置</li>
@@ -51,83 +55,61 @@
 
 						</div>
 
-
 						<table class="tablelist">
 							<thead>
 								<tr>
 									<th><input name="" type="checkbox" value="" checked="checked" /></th>
-									<th>编号<i class="sort"><img src="/images/px.gif" /></i></th>
-									<th>标题</th>
-									<th>用户</th>
-									<th>籍贯</th>
-									<th>发布时间</th>
-									<th>是否审核</th>
+									<th>学号<i class="sort"><img src="/images/px.gif" /></i></th>
+									<th>姓名</th>
+									<th>密码</th>
+									<th>年级</th>
+									<th>初始密码</th>
 									<th>操作</th>
 								</tr>
 							</thead>
-							<tbody>
-								<tr>
-									<td><input name="" type="checkbox" value="" /></td>
-									<td>20130908</td>
-									<td>王金平幕僚：马英九声明字字见血 人活着没意思</td>
-									<td>admin</td>
-									<td>江苏南京</td>
-									<td>2013-09-09 15:05</td>
-									<td>已审核</td>
-									<td><a href="#" class="tablelink">查看</a> <a href="#" class="tablelink"> 删除</a></td>
-								</tr>
-
-								<tr>
-									<td><input name="" type="checkbox" value="" /></td>
-									<td>20130907</td>
-									<td>温州19名小学生中毒流鼻血续：周边部分企业关停</td>
-									<td>uimaker</td>
-									<td>山东济南</td>
-									<td>2013-09-08 14:02</td>
-									<td>未审核</td>
-									<td><a href="#" class="tablelink">查看</a> <a href="#" class="tablelink">删除</a></td>
-								</tr>
-							
+							<tbody id="tbodyId">
+								<!-- data -->
 							</tbody>
 						</table>
 
-
 						<div class="pagin">
-							<div class="message">共<i class="blue">1256</i>条记录，当前显示第&nbsp;<i class="blue">2&nbsp;</i>页</div>
+							<div class="message" id="message">共<i class="blue">
+									<!-- page info -->
+							</div>
 							<ul class="paginList">
-								<li class="paginItem"><a href="javascript:;"><span class="pagepre"></span></a></li>
-								<li class="paginItem"><a href="javascript:;">1</a></li>
-								<li class="paginItem current"><a href="javascript:;">2</a></li>
-								<li class="paginItem"><a href="javascript:;">3</a></li>
-								<li class="paginItem"><a href="javascript:;">4</a></li>
-								<li class="paginItem"><a href="javascript:;">5</a></li>
-								<li class="paginItem more"><a href="javascript:;">...</a></li>
-								<li class="paginItem"><a href="javascript:;">10</a></li>
-								<li class="paginItem"><a href="javascript:;"><span class="pagenxt"></span></a></li>
+								<li class="paginItem"><a href="javascript:;" onclick="toPage('first')"><span class="pagepre"></span></a></li>
+								<li class="paginItem"><a href="javascript:;" onclick="toPage('prev')">上一页</a></li>
+								<li class="paginItem"><input type="text" placeholder="输入页码" id="pageId"><a href="javascript:;" onclick="toPage('go')">跳转</a></li>
+								<li class="paginItem"><a href="javascript:;" onclick="toPage('next')">下一页</a></li>
+								<li class="paginItem"><a href="javascript:;" onclick="toPage('final')"><span class="pagenxt"></span></a></li>
 							</ul>
 						</div>
 
-
 						<div class="tip">
-							<div class="tiptop"><span>提示信息</span><a></a></div>
-
+							<div class="tiptop"><span>添加学生</span><a></a></div>
+							
 							<div class="tipinfo">
-								<span><img src="images/ticon.png" /></span>
 								<div class="tipright">
-									<p>是否确认对信息的修改 ？</p>
-									<cite>如果是请点击确定按钮 ，否则请点取消。</cite>
+									<input type="number" id="sid" placeholder="学号" required="required">
+									<input type="text" id="name" placeholder="姓名" required="required"  pattern="^[\u2E80-\u9FFF]+$">
+									<select id="grade">
+										<option value ="初一">初一</option>
+										<option value ="初二">初二</option>
+										<option value ="初三">初三</option>
+										<option value ="高一">高一</option>
+										<option value ="高二">高二</option>
+										<option value ="高三">高三</option>
+									</select>
+									<input type="text" id="password" placeholder="初始密码" required="required">
 								</div>
 							</div>
-
+							
 							<div class="tipbtn">
-								<input name="" type="button" class="sure" value="确定" />&nbsp;
-								<input name="" type="button" class="cancel" value="取消" />
+								<input type="button" class="sure" value="确定" />&nbsp;
+								<input type="button" class="cancel" value="取消" />
 							</div>
-
+							
 						</div>
-
-
-
 
 					</div>
 
@@ -138,4 +120,169 @@
 		</div>
 		<!-- 父main end -->
 	</body>
+	<script type="text/javascript">
+		$(".click").click(function() {
+			$(".tip").fadeIn(200);
+		});
+
+		$(".tiptop a").click(function() {
+			$(".tip").fadeOut(200);
+		});
+		
+		var jsonData = {}
+		
+		$(".sure").click(function() {
+			jsonData = {
+				sid:$('#sid').val(),
+				name:$('#name').val(),
+				grade:$('#grade').val(),
+				password:$('#password').val(),
+			}
+			$.ajax({
+				url: '/admin/student/add',
+				data: jsonData,
+				dataType: 'json',
+				type: 'POST',
+				success: function(res) {
+					console.log(res)
+					if(res.status==1) {
+						new NoticeJs({
+							text: res.msg,
+							position: 'topCenter',
+							type: 'success',
+							animation: {
+								open: 'animated bounceInDown',
+								close: 'animated bounceOutUp'
+							}
+						}).show()
+						$(".tip").fadeOut(100);
+						jsonData = {}
+					}
+				}
+			})
+		});
+
+		$(".cancel").click(function() {
+			$(".tip").fadeOut(100);
+		});
+
+		var count = 0
+		var page = 1
+
+		function render(page, kw) {
+			$.ajax({
+				url: '/admin/student/getStudentAll',
+				data: {
+					page,
+					kw
+				},
+				dataType: 'json',
+				type: 'GET',
+				success: function(res) {
+					var htmlStr = ''
+					if (res.status == -1) {
+						new NoticeJs({
+							text: res.data,
+							position: 'topCenter',
+							type: 'error',
+							animation: {
+								open: 'animated bounceInDown',
+								close: 'animated bounceOutUp'
+							}
+						}).show()
+						return
+					}
+					data = res.data
+					count = res.count
+					var page = res.page
+					for (var i = 0; i < data.length; i++) {
+						htmlStr +=
+							`
+								<tr>
+									<td><input name="" type="checkbox" value="" /></td>
+									<td>
+										${data[i].sid}
+									</td>
+									<td>
+										${data[i].name}
+									</td>
+									<td>
+										${data[i].password}
+									</td>
+									<td>
+										${data[i].grade}
+									</td>
+									<td>${data[i].initPs?"是":"否"}</td>
+									<td><a href="/admin/student/update/${data[i].sid}" class="tablelink">修改</a> <a href="#" class="tablelink" onclick="remove('${data[i]._id}')"> 删除</a></td>
+								</tr>
+							`
+					}
+					$('#tbodyId').html(htmlStr)
+					$('#message').html(
+						`
+								${count}</i>条记录，当前显示第&nbsp;<i class="blue">
+								${page}&nbsp;</i>页
+							`
+					)
+				}
+			})
+		}
+
+		render(1)
+
+
+		function toPage(tip) {
+			switch (tip) {
+				case 'first':
+					page = 1
+					break;
+				case 'final':
+					page = Math.ceil(count / 8)
+					break;
+				case 'prev':
+					page--
+					if (page < 1) page = 1
+					break;
+				case 'next':
+					page++
+					if (page > count / 8) page = Math.ceil(count / 8)
+					break;
+				default:
+					page = $('#pageId').val()
+					break;
+			}
+			render(page, $('#searchInput').val())
+		}
+
+		function search() {
+			var kw = $('#searchInput').val()
+			render(1, kw)
+		}
+		
+		function remove(id) {
+			if(confirm('删除不可逆，请确认后操作')) {
+				$.ajax({
+					url:'/admin/student/remove',
+					data:{id},
+					dataType:'json',
+					type:'POST',
+					success:function(res) {
+						let tip = ''
+						res.status==1?tip='success':'error',
+						new NoticeJs({
+							text: res.msg,
+							position: 'topCenter',
+							type: tip,
+							animation: {
+								open: 'animated bounceInDown',
+								close: 'animated bounceOutUp'
+							}
+						}).show()
+						render(1)
+					}
+				})
+			}
+		}
+		
+	</script>
 </html>

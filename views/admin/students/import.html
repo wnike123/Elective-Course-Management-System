@@ -35,7 +35,7 @@
 					<div class="rightinfo">
 						<div class="formbody">
 							<div class="formtitle"><span>请导入excel表格</span></div>
-							<form action="/admin/student/import" method="post" enctype="multipart/form-data">
+							<form action="/admin/student/import" method="post" enctype="multipart/form-data" target="nm_iframe">
 								<ul class="forminfo">
 									<li><strong>请上传符合形式的表格,每个年级一个子表，子表的每一列依次是学号、姓名、性别</strong></li>
 									<li><label></label><input name="studentexcel" type="file" /></li>
@@ -44,6 +44,8 @@
 									</li>
 								</ul>
 							</form>
+							<!-- 错误提示信息 -->
+							 <iframe id="id_iframe" name="nm_iframe"></iframe>  
 						</div>
 					</div>
 				</div>

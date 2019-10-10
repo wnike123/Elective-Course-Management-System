@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>信息管理系统</title>
+		<link href="/css/style.css" rel="stylesheet" type="text/css" />
+		<script type="text/javascript" src="/js/jquery.js"></script>
+		<link href="/css/animate.css" rel="stylesheet" type="text/css">
+		<link href="/css/noticejs.css" rel="stylesheet" type="text/css">
+		<script type="text/javascript" src="/js/notice.js"></script>
+	</head>
+	<body style="background: background:url(images/topbg.gif) repeat-x">
+		<div class="main">
+
+			<!-- 头部 -->
+			<%- include ../common/top.html %>
+			<!--头部结束 end-->
+
+			<!-- 内容区域 -->
+			<div class="content">
+
+				<!-- 左侧导航 -->
+				<div class="leftNav">
+					<%- include ../common/left.html %>
+				</div>
+				<!-- 左侧导航 end -->
+
+				<!-- 右侧内容 -->
+				<div class="right-content">
+					<div class="place">
+						<span>位置：</span>
+						<ul class="placeul">
+							<li><a href="#">首页</a></li>
+							<li><a href="#">学生信息修改</a></li>
+						</ul>
+					</div>
+
+					<div class="formbody">
+
+						<div class="formtitle"><span>基本信息</span></div>
+
+						<ul class="forminfo">
+							<li><label>学号</label><input disabled value="<%= data.sid %>" name="sid" type="text" class="dfinput" /><i onclick="change(event,'<%= data._id %>')">修改</i></li>
+							<li><label>姓名</label><input disabled value="<%= data.name %>" name="name" type="text" class="dfinput" /><i onclick="change(event,'<%= data._id %>')">修改</i></li>
+							<li><label>密码</label><input disabled value="<%= data.password %>" name="password" type="text" class="dfinput" /><i onclick="change(event,'<%= data._id %>')">修改</i></li>
+							<li><label>年级</label><input disabled value="<%= data.grade %>" name="grade" type="text" class="dfinput" /><i onclick="change(event,'<%= data._id %>')">修改</i></li>
+							<li><label>操作</label><button class="btn" onclick="goPage()">返回学生列表</button></li>
+						</ul>
+						
+						<script>
+							var str = ''
+							function change(e,id) {
+								var id = id
+								var event = e.currentTarget
+								var inputValue = event.previousElementSibling.value
+								var inputName = event.previousElementSibling.name
+								switch(event.innerText) {
+									case '修改':
+										event.innerText = '确定'
+										event.style.color = 'blue'
+										event.previousElementSibling.disabled=""
+										event.previousElementSibling.focus()
+										str = inputValue
+										break
+									case '确定':
+										event.innerText = '修改'
+										event.previousElementSibling.disabled=true
+										event.style.color = ''
+										if(str==inputValue) {
+											new NoticeJs({
+											    text: '取消变更',
+												position: 'topCenter',
+												type:'info',
+												animation: {
+												   open: 'animated bounceInDown',
+												   close: 'animated bounceOutUp'
+												}
+											}).show()
+											return 
+										}else {
+											var data = {_id: id}
+											data[inputName] = inputValue
+											$.ajax({
+											    url: "/admin/student/update",
+											    data:data,
+											    type: "POST",
+											    dataType: "json",
+											    success: function(data) {
+												   if(data.status==0) {
+													   new NoticeJs({
+													       text: data.data,
+													       position: 'topCenter',
+														   type:'success',
+															animation: {
+													   	       open: 'animated bounceInDown',
+													   	       close: 'animated bounceOutUp'
+															}
+													   }).show()
+												   }else {
+													   new NoticeJs({
+													       text: '修改失败',
+													       position: 'topCenter',
+														   type:'error',
+															animation: {
+													   	       open: 'animated bounceInDown',
+													   	       close: 'animated bounceOutUp'
+															}
+													   }).show()
+												   }
+											    }
+											})
+										}
+										break
+									default:
+									   break
+								}
+							}
+							function goPage() {
+								window.history.go(-1)
+							}
+						</script>
+
+					</div>
+				</div>
+				<!-- 右侧内容 end -->
+			</div>
+			<!-- 内容区域 end -->
+		</div>
+		<!-- 父main end -->
+	</body>
+</html>

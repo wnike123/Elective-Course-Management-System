@@ -584,6 +584,20 @@ h2 {
 	cursor: pointer;
 }
 
+.toolbar li input {
+	line-height: 33px;
+	font-size: 13px;
+	text-indent: 10px;
+}
+
+.toolbar li button {
+	font-size: 15px;
+	background: none;
+	border: none;
+	outline: none;
+	cursor: pointer;
+}
+
 .toolbar li span {
 	float: left;
 	margin-left: 10px;
@@ -675,13 +689,24 @@ h2 {
 
 .pagin .paginList .paginItem a {
 	float: left;
-	width: 31px;
+	padding: 0 5px;
+	min-width: 31px;
 	height: 28px;
 	border: 1px solid #DDD;
 	text-align: center;
 	line-height: 30px;
 	border-left: none;
 	color: #3399d5;
+	overflow: hidden;
+}
+
+.pagin .paginList .paginItem input {
+	float: left;
+	line-height: 28px;
+	font-size: 13px;
+	text-indent: 2px;
+	width: 60px;
+	border: 1px solid darkgray;
 }
 
 .pagin .paginList .paginItem:first-child a {
@@ -1110,8 +1135,9 @@ h2 {
 
 .tipinfo {
 	padding-top: 30px;
-	margin-left: 65px;
+	/* margin-left: 65px; */
 	height: 95px;
+	text-align: center;
 }
 
 .tipinfo span {
@@ -1123,7 +1149,7 @@ h2 {
 .tipright {
 	float: left;
 	padding-top: 15px;
-	padding-left: 10px;
+	/* padding-left: 10px; */
 }
 
 .tipright p {
@@ -1134,6 +1160,19 @@ h2 {
 
 .tipright cite {
 	color: #858686;
+}
+
+.tipright input,.tipright select{
+	border: 1px solid gray;
+	line-height: 25px;
+	margin: 5px 5px;
+	text-indent: 10px;
+	width: 40%;
+	vertical-align: lefttop;
+}
+
+.tipright select {
+	height: 28px;
 }
 
 .tipbtn {
