@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>信息管理系统</title>
+		<link href="/css/style.css" rel="stylesheet" type="text/css" />
+		<script type="text/javascript" src="/js/jquery.js"></script>
+		<link href="/css/animate.css" rel="stylesheet" type="text/css">
+		<link href="/css/noticejs.css" rel="stylesheet" type="text/css">
+		<script type="text/javascript" src="/js/notice.js"></script>
+	</head>
+	<body style="background: background:url(images/topbg.gif) repeat-x">
+		<div class="main">
+
+			<!-- 头部 -->
+			<%- include ../common/top.html %>
+			<!--头部结束 end-->
+
+			<!-- 内容区域 -->
+			<div class="content">
+
+				<!-- 左侧导航 -->
+				<div class="leftNav">
+					<%- include ../common/left.html %>
+				</div>
+				<!-- 左侧导航 end -->
+
+				<!-- 右侧内容 -->
+				<div class="right-content">
+					<div class="place">
+						<span>位置：</span>
+						<ul class="placeul">
+							<li><a href="#">首页</a></li>
+							<li><a href="#">课程信息修改</a></li>
+						</ul>
+					</div>
+
+					<div class="formbody">
+
+						<div class="formtitle"><span>基本信息</span></div>
+
+						<ul class="forminfo">
+							<li><label>课程名称</label><input value="<%= data.name %>" disabled name="name" type="text" class="dfinput" /><i onclick="change(event,'<%= data._id %>')">修改</i></li>
+							<li><label>上课时间</label><input value="<%= data.dayofweek %>" disabled name="dayofweek" type="text" class="dfinput" /><i onclick="change(event,'<%= data._id %>')">修改</i></li>
+							<li><label>上课人数</label><input value="<%= data.number %>" disabled name="number" type="text" class="dfinput" /><i onclick="change(event,'<%= data._id %>')">修改</i></li>
+							<li><label>教师姓名</label><input value="<%= data.teacher %>" disabled name="teacher" type="text" class="dfinput" /><i onclick="change(event,'<%= data._id %>')">修改</i></li>
+							<li class="update-allow"><label>允许年级</label>
+								<% var arr=['初一','初二','初三','高一','高二','高三']; for(var i=0;i<arr.length;i++) { %>
+									<% if(data.allow.indexOf(arr[i])!=-1) { %>
+										<input type="checkbox" name="allow" value="<%= arr[i] %>" disabled='disabled' checked="checked"><%= arr[i] %>
+									<% }else { %>
+										<input type="checkbox" name="allow" value="<%= arr[i] %>" disabled='disabled'><%= arr[i] %>
+									<% } %>
+								<% } %>
+								<i onclick="changeAllow(event,'<%= data._id %>')">修改</i>
+							</li>
+							<li><label>课程介绍</label>
+								<textarea disabled="disabled" style="width: 200px; border: 1px solid gray;" id="brief" name="brief" ><%= data.brief %></textarea>
+								<i>修改</i>
+							</li>
+							<li><label>操作</label><a class="btn" href='/admin/coursemanager'>返回课程列表</a></li>
+						</ul>
+						
+						<script>
+							var strArr = [] //记录勾选状态
+							function changeAllow (e,id) {
+								var id = id
+								var event = e.currentTarget
+								var inputName = event.previousElementSibling.name
+								var allowArr = document.querySelectorAll("input[name='allow']")
+								switch(event.innerText) {
+									case '修改':
+										event.innerText = '确定'
+										event.style.color = 'blue'
+										allowArr.forEach((item)=>{
+											item.disabled = ''
+											if(item.checked) {
+												strArr.push(item.value)
+											}
+										})
+										break
+									case '确定':
+									    var arr = []
+										event.innerText = '修改'
+										event.style.color = ''
+										allowArr.forEach((item)=>{
+											item.disabled = 'disabled'
+											if(item.checked) {
+												arr.push(item.value)
+											}
+										})
+										var a = strArr.toString()
+										var b = arr.toString()
+										if(a == b) {
+											 noticeAction('取消变更','info')
+											strArr = []
+											return
+										}else {
+											var data = {_id: id}
+											data.allow = arr
+											$.ajax({
+											    url: "/admin/course/update",
+											    data:data,
+											    type: "POST",
+											    dataType: "json",
+												traditional: true,
+											    success: function(data) {
+												   if(data.status==0) {
+													   new NoticeJs({
+													       text: data.data,
+													       position: 'topCenter',
+														   type:'success',
+															animation: {
+													   	       open: 'animated bounceInDown',
+													   	       close: 'animated bounceOutUp'
+															}
+													   }).show()
+												   }else {
+													   noticeAction('修改失败','error')
+												   }
+											    }
+											})
+										}
+										strArr = []
+										break
+									default:
+									   break
+								}
+							}
+							
+							var str = '' //记录原状态
+							function change(e,id) {
+								var id = id
+								var event = e.currentTarget
+								var inputValue = event.previousElementSibling.value
+								var inputName = event.previousElementSibling.name
+								switch(event.innerText) {
+									case '修改':
+										event.innerText = '确定'
+										event.style.color = 'blue'
+										event.previousElementSibling.disabled=""
+										event.previousElementSibling.focus()
+										str = inputValue
+										break
+									case '确定':
+										event.innerText = '修改'
+										event.previousElementSibling.disabled=true
+										event.style.color = ''
+										if(str==inputValue) {
+											 noticeAction('取消变更','info')
+											str = ''
+											return 
+										}else {
+											var data = {_id: id}
+											data[inputName] = inputValue
+											$.ajax({
+											    url: "/admin/course/update",
+											    data:data,
+											    type: "POST",
+											    dataType: "json",
+											    success: function(data) {
+												   if(data.status==0) {
+													   noticeAction(data.data,'success')
+												   }else {
+													   noticeAction('修改失败','error')
+												   }
+											    }
+											})
+										}
+										str = ''
+										break
+									default:
+									   break
+								}
+							}
+							
+							function noticeAction(text,actionType) {
+								new NoticeJs({
+								    text: text,
+									position: 'topCenter',
+									type: actionType,
+									animation: {
+									   open: 'animated bounceInDown',
+									   close: 'animated bounceOutUp'
+									}
+								}).show()
+							}
+						</script>
+
+					</div>
+				</div>
+				<!-- 右侧内容 end -->
+			</div>
+			<!-- 内容区域 end -->
+		</div>
+		<!-- 父main end -->
+	</body>
+</html>

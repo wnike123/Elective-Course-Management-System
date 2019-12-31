@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>课程管理-信息管理系统</title>
+		<link href="/css/style.css" rel="stylesheet" type="text/css" />
+		<script type="text/javascript" src="/js/jquery.js"></script>
+		<link href="/css/animate.css" rel="stylesheet" type="text/css">
+		<link href="/css/noticejs.css" rel="stylesheet" type="text/css">
+		<script type="text/javascript" src="/js/notice.js"></script>
+	</head>
+	<body style="background: background:url(images/topbg.gif) repeat-x">
+		<div class="main">
+
+			<!-- 头部 -->
+			<%- include ../common/top.html %>
+			<!--头部结束 end-->
+
+			<!-- 内容区域 -->
+			<div class="content">
+
+				<!-- 左侧导航 -->
+				<div class="leftNav">
+					<%- include ../common/left.html %>
+				</div>
+				<!-- 左侧导航 end -->
+
+				<!-- 右侧内容 -->
+				<div class="right-content">
+					<div class="place">
+						<span>位置：</span>
+						<ul class="placeul">
+							<li><a href="#">首页</a></li>
+							<li><a href="/admin/coursemanager">课程管理</a></li>
+							<li><a href="#">课程列表</a></li>
+						</ul>
+					</div>
+
+					<div class="rightinfo">
+
+						<div class="tools">
+
+							<ul class="toolbar">
+								<li class="click"><span><img src="/images/t01.png" /></span>添加</li>
+								<li>
+									<input type="text" placeholder="请输入搜索内容" id="searchInput">
+									<button onclick="search()">搜索</button>
+								</li>
+							</ul>
+						
+						</div>
+						
+						<ul class="classlist" id="classlist">
+
+							<!-- <li>
+								<span><img src="/images/001.jpg" /></span>
+								<div class="lright">
+									<h2>模拟电子技术</h2>
+									<p>课程安排: 周二<br />可报人数: 30<br />老师: 王璐</p>
+									<a class="enter">修改课程</a>
+								</div>
+							</li> -->
+
+						</ul>
+
+						<div class="clear"></div>
+
+						<div class="pagin">
+							<div class="message" id="message">共<i class="blue">
+									<!-- page info -->
+							</div>
+							<ul class="paginList">
+								<li class="paginItem"><a href="javascript:;"><span class="pagepre"></span></a></li>
+								<li class="paginItem"><a href="javascript:;">上一页</a></li>
+								<li class="paginItem"><input type="text" placeholder="输入页码" id="pageId"><a href="javascript:;" onclick="toPage('go')">跳转</a></li>
+								<li class="paginItem"><a href="javascript:;">下一页</a></li>
+								<li class="paginItem"><a href="javascript:;"><span class="pagenxt"></span></a></li>
+							</ul>
+						</div>
+
+						<div class="add-clss-tip">
+							<div class="tiptop"><span>添加课程</span><a></a></div>
+
+							<div class="add-class-wrp">
+								<ul class="add-class">
+									<li>
+										<label class="add-label">课程标题</label>
+										<input type="text" id="title" name="name" placeholder="输入课程标题" />
+									</li>
+									<li>
+										<label class="add-label">允许年级</label>
+										<input type="checkbox" name="allow" value="初一">初一
+										<input type="checkbox" name="allow" value="初二">初二
+										<input type="checkbox" name="allow" value="初三">初三
+										<input type="checkbox" name="allow" value="高一">高一
+										<input type="checkbox" name="allow" value="高二">高二
+										<input type="checkbox" name="allow" value="高三">高三
+									</li>
+									<li>
+										<label class="add-label">课程安排</label>
+										<input type="text" id="dayofweek" name="dayofweek" placeholder="上课时间" />
+									</li>
+									<li>
+										<label class="add-label">限制人数</label>
+										<input type="text" id="number" name="number" placeholder="上课人数" />
+									</li>
+									<li>
+										<label class="add-label">上课老师</label>
+										<input type="text" id="teacher" name="teacher" placeholder="教师名字" />
+									</li>
+									<li>
+										<label class="add-label">课程简介</label>
+										<textarea id="brief"></textarea>
+									</li>
+								</ul>
+							</div>
+
+							<div class="tipbtn">
+								<input name="" type="button" class="sure" value="确定" />&nbsp;
+								<input name="" type="button" class="cancel" value="取消" />
+							</div>
+
+						</div>
+
+					</div>
+
+				</div>
+				<!-- 右侧内容 end -->
+			</div>
+			<!-- 内容区域 end -->
+		</div>
+		<!-- 父main end -->
+	</body>
+	<script>
+		// 提示框显示隐藏
+		$(".click").click(function() {
+			$(".add-clss-tip").fadeIn(200);
+		});
+		
+		$(".tiptop a").click(function() {
+			$(".add-clss-tip").fadeOut(200);
+		});
+		$(".cancel").click(function() {
+			$(".add-clss-tip").fadeOut(100);
+		});
+		
+		//添加课程
+		$(".sure").click(function() {
+			var chk_value =[]; 
+			$('input[name="allow"]:checked').each(function(){ 
+				chk_value.push($(this).val()); 
+			});
+			var jsonData = {}
+			jsonData = {
+				name:$("#title").val(),
+				allow:chk_value,
+				dayofweek:$("#dayofweek").val(),
+				number:$("#number").val(),
+				teacher:$("#teacher").val(),
+				brief:$("#brief").val()
+			}
+			$.ajax({
+				url: '/admin/course/addCourse',
+				data:jsonData,
+				dataType: 'json',
+				type: 'POST',
+				traditional: true,
+				success: function(res) {
+					if(res.status==1) {
+						new NoticeJs({
+							text: res.msg,
+							position: 'topCenter',
+							type: 'success',
+							animation: {
+								open: 'animated bounceInDown',
+								close: 'animated bounceOutUp'
+							}
+						}).show()
+						$(".add-clss-tip").fadeOut(100);
+						jsonData = {}
+						render(1)
+					}
+				}
+			})
+		});
+		
+		//模板渲染
+		var count = 0
+		var page = 1
+		
+		render(1)
+		
+		function render(page, kw) {
+			$.ajax({
+				url: '/admin/course/getCourseList',
+				data: {
+					page,
+					kw
+				},
+				dataType: 'json',
+				type: 'GET',
+				success: function(res) {
+					var htmlStr = ''
+					if (res.status == -1) {
+						new NoticeJs({
+							text: res.data,
+							position: 'topCenter',
+							type: 'error',
+							animation: {
+								open: 'animated bounceInDown',
+								close: 'animated bounceOutUp'
+							}
+						}).show()
+						return
+					}
+					data = res.data
+					count = res.count
+					var page = res.page
+					for (var i = 0; i < data.length; i++) {
+						htmlStr +=
+							`<li>
+									<span><img src="/images/001.jpg" /></span>
+									<div class="lright">
+										<h2>${data[i].name}</h2>
+										<p>课程安排: 周${data[i].dayofweek}<br />可报人数: ${data[i].number}<br />老师: ${data[i].teacher}</p>
+										<p>允许年级: ${data[i].allow}</p>
+										<p class="brief">简介: ${data[i].brief}</p>
+										<a href="/admin/course/update/${data[i].cid}" class="handle enter">修改</a>
+										<a class="handle delete" onclick="remove('${data[i]._id}')">删除</a>
+									</div>
+								</li>`
+					}
+					$('#classlist').html(htmlStr)
+					$('#message').html(
+						`
+								${count}</i>条记录，当前显示第&nbsp;<i class="blue">
+								${page}&nbsp;</i>页
+							`
+					)
+				}
+			})
+		}
+		
+		function remove(id) {
+			if(confirm('删除不可逆，请确认后操作')) {
+				$.ajax({
+					url:'/admin/course/remove',
+					data:{id},
+					dataType:'json',
+					type:'POST',
+					success:function(res) {
+						let tip = ''
+						res.status==1?tip='success':'error',
+						new NoticeJs({
+							text: res.msg,
+							position: 'topCenter',
+							type: tip,
+							animation: {
+								open: 'animated bounceInDown',
+								close: 'animated bounceOutUp'
+							}
+						}).show()
+						render(1)
+					}
+				})
+			}
+		}
+		
+		function search() {
+			var kw = $('#searchInput').val()
+			render(1, kw)
+		}
+	</script>
+</html>

@@ -670,6 +670,7 @@ h2 {
 	position: relative;
 	margin-top: 10px;
 	padding: 0 12px;
+	margin-bottom: 20px;
 }
 
 .pagin .blue {
@@ -1162,7 +1163,8 @@ h2 {
 	color: #858686;
 }
 
-.tipright input,.tipright select{
+.tipright input,
+.tipright select {
 	border: 1px solid gray;
 	line-height: 25px;
 	margin: 5px 5px;
@@ -1609,11 +1611,10 @@ h2 {
 	line-height: 20px;
 }
 
-.enter {
-	display: block;
+.handle {
+	display: inline-block;
 	margin-top: 5px;
-	width: 94px;
-	height: 30px;
+	padding: 3px 10px;
 	color: #fff;
 	background: #3eafe0;
 	font-weight: bold;
@@ -1623,7 +1624,11 @@ h2 {
 	cursor: pointer;
 }
 
-.enter:hover {
+.delete {
+	background: red;
+}
+
+.handle:hover {
 	color: #fff;
 	background: #d98c1d;
 }
@@ -1670,4 +1675,75 @@ h2 {
 	cursor: pointer;
 	border-radius: 3px;
 	behavior: url(js/pie.htc);
+}
+
+.add-class li {
+	margin-top: 5px;
+}
+
+.add-class input {
+	padding: 5px;
+	border: 1px solid #e1e1e1;
+}
+
+.add-class input[type='checkbox'] {
+	margin-left: 5px;
+}
+
+.brief {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.add-class-wrp {
+	margin-top: 10px;
+	margin-left: 50px;
+}
+
+.add-label {
+	display: inline-block;
+	width: 60px;
+	padding: 5px 0;
+	margin-right: 5px;
+	text-align: left;
+}
+
+.add-clss-tip {
+	width: 485px;
+	min-height: 260px;
+	height: auto;
+	position: absolute;
+	top: 10%;
+	left: 30%;
+	background: #fcfdfd;
+	box-shadow: 1px 8px 10px 1px #9b9b9b;
+	border-radius: 1px;
+	behavior: url(js/pie.htc);
+	display: none;
+	z-index: 111111;
+	padding-bottom: 20px;
+}
+
+#brief {
+	border: 0;
+	border-radius: 5px;
+	background-color: rgba(241, 241, 241, .98);
+	width: 155px;
+	height: 100px;
+	resize: none;
+	display: inline-block;
+	vertical-align: top;
+}
+
+.update-allow input[type='checkbox'] {
+	margin-right: 5px;
+	margin-left: 5px;
+	width: 20px;
+	height: 20px;
+	vertical-align: middle;
+}
+
+.forminfo li i {
+	cursor: pointer;
 }

@@ -44,7 +44,7 @@
 							<li><label>姓名</label><input disabled value="<%= data.name %>" name="name" type="text" class="dfinput" /><i onclick="change(event,'<%= data._id %>')">修改</i></li>
 							<li><label>密码</label><input disabled value="<%= data.password %>" name="password" type="text" class="dfinput" /><i onclick="change(event,'<%= data._id %>')">修改</i></li>
 							<li><label>年级</label><input disabled value="<%= data.grade %>" name="grade" type="text" class="dfinput" /><i onclick="change(event,'<%= data._id %>')">修改</i></li>
-							<li><label>操作</label><button class="btn" onclick="goPage()">返回学生列表</button></li>
+							<li><label>操作</label><a class="btn" href='/admin/student'>返回学生列表</a></li>
 						</ul>
 						
 						<script>
@@ -115,9 +115,7 @@
 									   break
 								}
 							}
-							function goPage() {
-								window.history.go(-1)
-							}
+							
 						</script>
 
 					</div>
